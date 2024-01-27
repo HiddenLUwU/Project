@@ -1,1 +1,256 @@
-#drawing
+import pygame
+import A_main
+import sqlite3
+
+
+def draw(surfacee, window, sounds_on, music_on, mbgc, game_ended, won):
+    if window == 'MM':
+        if mbgc == 4:
+            mbgc = 1
+        else:
+            mbgc += 1
+        mm_pic = A_main.load_image(f"mm-{mbgc}.png")
+        mm_pic2 = pygame.transform.scale(mm_pic, (1375, 1030))
+        surfacee.blit(mm_pic2, (0, 0))
+    elif window == 'LVLS':
+        if A_main.this_has_to_stop:
+            A_main.counter_that_moves_lvl_bg = 0
+        A_main.game_over = False
+        A_main.game_won = False
+        connect = sqlite3.connect('game_bd')
+        cur = connect.cursor()
+        result = cur.execute("SELECT lvl_status FROM Levels").fetchall()
+        x = int(result[0][0]) + int(result[1][0]) + int(result[2][0]) + int(result[3][0]) + int(result[4][0])
+        lvls_pic = A_main.load_image(f"lvls-{x}.png")
+        lvls_pic2 = pygame.transform.scale(lvls_pic, (1375, 1030))
+        surfacee.blit(lvls_pic2, (0, 0))
+        cur = connect.cursor()
+        res2 = cur.execute("SELECT time_passing FROM Levels").fetchall()
+        font = pygame.font.Font(None, 80)
+        if res2[0][0] != '--:--:--':
+            w = 580
+        else:
+            w = 380
+        time = font.render(f"{res2[0][0]}", True, (0, 0, 0))
+        surfacee.blit(time, (w, 515))
+        if res2[1][0] != '--:--:--':
+            w = 580
+        else:
+            w = 380
+        time2 = font.render(f"{res2[1][0]}", True, (0, 0, 0))
+        surfacee.blit(time2, (w, 620))
+        if res2[2][0] != '--:--:--':
+            w = 580
+        else:
+            w = 380
+        time3 = font.render(f"{res2[2][0]}", True, (0, 0, 0))
+        surfacee.blit(time3, (w, 725))
+        if res2[3][0] != '--:--:--':
+            w = 580
+        else:
+            w = 380
+        time4 = font.render(f"{res2[3][0]}", True, (0, 0, 0))
+        surfacee.blit(time4, (w, 835))
+        if res2[4][0] != '--:--:--':
+            w = 580
+        else:
+            w = 380
+        time5 = font.render(f"{res2[4][0]}", True, (0, 0, 0))
+        surfacee.blit(time5, (w, 950))
+    elif window == 'SET' and music_on and sounds_on:
+        settings_pic = A_main.load_image("set-11.png")
+        settings_pic2 = pygame.transform.scale(settings_pic, (1375, 1030))
+        surfacee.blit(settings_pic2, (0, 0))
+    elif window == 'SET' and not music_on and sounds_on:
+        settings_pic = A_main.load_image("set-01.png")
+        settings_pic2 = pygame.transform.scale(settings_pic, (1375, 1030))
+        surfacee.blit(settings_pic2, (0, 0))
+    elif window == 'SET' and music_on and not sounds_on:
+        settings_pic = A_main.load_image("set-10.png")
+        settings_pic2 = pygame.transform.scale(settings_pic, (1375, 1030))
+        surfacee.blit(settings_pic2, (0, 0))
+    elif window == 'SET' and not music_on and not sounds_on:
+        settings_pic = A_main.load_image("set-00.png")
+        settings_pic2 = pygame.transform.scale(settings_pic, (1375, 1030))
+        surfacee.blit(settings_pic2, (0, 0))
+    elif window == 'SHOP':
+        connect = sqlite3.connect('game_bd')
+        cur = connect.cursor()
+        result = cur.execute("SELECT dragon_status FROM Dragon").fetchall()
+        res2 = cur.execute("SELECT money FROM Money").fetchall()
+        connect.close()
+        mc = int(res2[0][0])
+        stormfly = result[1][0]
+        toothless = result[2][0]
+        con = sqlite3.connect('game_bd')
+        cur = con.cursor()
+        if stormfly == 'u' and mc >= 10:
+            stormfly = 'b'
+            updating = cur.execute(f"UPDATE Dragon SET dragon_status = 'b' WHERE name = 'stormfly'")
+            con.commit()
+        if stormfly == 'b' and mc < 10:
+            stormfly = 'u'
+            updating = cur.execute(f"UPDATE Dragon SET dragon_status = 'u' WHERE name = 'stormfly'")
+            con.commit()
+        if toothless == 'u' and mc >= 20:
+            toothless = 'b'
+            updating = cur.execute(f"UPDATE Dragon SET dragon_status = 'b' WHERE name = 'toothless'")
+            con.commit()
+        if toothless == 'b' and mc < 20:
+            toothless = 'u'
+            updating = cur.execute(f"UPDATE Dragon SET dragon_status = 'u' WHERE name = 'toothless'")
+            con.commit()
+        con.close()
+        dragons = f"{result[0][0]}{stormfly}{toothless}"
+        shop_pic = A_main.load_image(f"shop-{dragons}.png")
+        shop_pic2 = pygame.transform.scale(shop_pic, (1375, 1030))
+        surfacee.blit(shop_pic2, (0, 0))
+        font = pygame.font.Font(None, 80)
+        money = font.render(f"{res2[0][0]}", True, (0, 0, 0))
+        surfacee.blit(money, (1284, 33))
+
+    elif window == 'LVL1':
+        if A_main.game_started:
+            surfacee.fill('#68EAFF')
+            lvls_pic = A_main.load_image('lvl1-bg.png')
+            surfacee.blit(lvls_pic, (A_main.counter_that_moves_lvl_bg, 0))
+            A_main.counter_that_moves_lvl_bg -= 15
+            A_main.all_sprites.draw(surfacee)
+            A_main.spikes_1.draw(surfacee)
+            A_main.all_sprites.update()
+            A_main.spikes_1.update()
+        if A_main.counter_that_moves_lvl_bg <= -5800:
+            A_main.game_won = True
+            A_main.this_has_to_stop = True
+            A_main.game_started = False
+            A_main.game_over = True
+        if A_main.game_over:
+            if A_main.game_won:
+                won = True
+                gameoverpic = A_main.load_image('LevelPassedPic.png')
+                surfacee.blit(gameoverpic, (0, 0))
+                A_main.game_started = False
+                game_ended = True
+            else:
+                gameoverpic = A_main.load_image('GameOverPic.png')
+                surfacee.blit(gameoverpic, (0, 0))
+                A_main.game_started = False
+        if A_main.this_has_to_stop:
+            A_main.counter_that_moves_lvl_bg = 0
+
+    elif window == 'LVL2':
+        if A_main.game_started:
+            surfacee.fill('#7E756B')
+            lvls_pic = A_main.load_image('lvl2-bg.png')
+            surfacee.blit(lvls_pic, (A_main.counter_that_moves_lvl_bg, 0))
+            A_main.counter_that_moves_lvl_bg -= 15
+            A_main.all_sprites.draw(surfacee)
+            A_main.spikes_2.draw(surfacee)
+            A_main.all_sprites.update()
+            A_main.spikes_2.update()
+        if A_main.counter_that_moves_lvl_bg <= -5800:
+            A_main.game_won = True
+            A_main.this_has_to_stop = True
+            A_main.game_started = False
+            A_main.game_over = True
+        if A_main.game_over:
+            if A_main.game_won:
+                won = True
+                gameoverpic = A_main.load_image('LevelPassedPic.png')
+                surfacee.blit(gameoverpic, (0, 0))
+                A_main.game_started = False
+                game_ended = True
+            else:
+                gameoverpic = A_main.load_image('GameOverPic.png')
+                surfacee.blit(gameoverpic, (0, 0))
+                A_main.game_started = False
+        if A_main.this_has_to_stop:
+            A_main.counter_that_moves_lvl_bg = 0
+
+    elif window == 'LVL3':
+        if A_main.game_started:
+            surfacee.fill('#68EAFF')
+            lvls_pic = A_main.load_image('lvl3-bg.png')
+            surfacee.blit(lvls_pic, (A_main.counter_that_moves_lvl_bg, 0))
+            A_main.counter_that_moves_lvl_bg -= 15
+            A_main.all_sprites.draw(surfacee)
+            A_main.spikes_3.draw(surfacee)
+            A_main.all_sprites.update()
+            A_main.spikes_3.update()
+        if A_main.counter_that_moves_lvl_bg <= -5800:
+            A_main.game_won = True
+            A_main.this_has_to_stop = True
+            A_main.game_started = False
+            A_main.game_over = True
+        if A_main.game_over:
+            if A_main.game_won:
+                won = True
+                gameoverpic = A_main.load_image('LevelPassedPic.png')
+                surfacee.blit(gameoverpic, (0, 0))
+                A_main.game_started = False
+                game_ended = True
+            else:
+                gameoverpic = A_main.load_image('GameOverPic.png')
+                surfacee.blit(gameoverpic, (0, 0))
+                A_main.game_started = False
+        if A_main.this_has_to_stop:
+            A_main.counter_that_moves_lvl_bg = 0
+
+    elif window == 'LVL4':
+        if A_main.game_started:
+            surfacee.fill('#78A6C4')
+            lvls_pic = A_main.load_image('lvl4-bg.png')
+            surfacee.blit(lvls_pic, (A_main.counter_that_moves_lvl_bg, 0))
+            A_main.counter_that_moves_lvl_bg -= 15
+            A_main.all_sprites.draw(surfacee)
+            A_main.spikes_4.draw(surfacee)
+            A_main.all_sprites.update()
+            A_main.spikes_4.update()
+        if A_main.counter_that_moves_lvl_bg <= -5800:
+            A_main.game_won = True
+            A_main.this_has_to_stop = True
+            A_main.game_started = False
+            A_main.game_over = True
+        if A_main.game_over:
+            if A_main.game_won:
+                won = True
+                gameoverpic = A_main.load_image('LevelPassedPic.png')
+                surfacee.blit(gameoverpic, (0, 0))
+                A_main.game_started = False
+                game_ended = True
+            else:
+                gameoverpic = A_main.load_image('GameOverPic.png')
+                surfacee.blit(gameoverpic, (0, 0))
+                A_main.game_started = False
+        if A_main.this_has_to_stop:
+            A_main.counter_that_moves_lvl_bg = 0
+
+    elif window == 'LVL5':
+        if A_main.game_started:
+            surfacee.fill('#1F006F')
+            lvls_pic = A_main.load_image('lvl5-bg.png')
+            surfacee.blit(lvls_pic, (A_main.counter_that_moves_lvl_bg, 0))
+            A_main.counter_that_moves_lvl_bg -= 15
+            A_main.all_sprites.draw(surfacee)
+            A_main.spikes_5.draw(surfacee)
+            A_main.all_sprites.update()
+            A_main.spikes_5.update()
+        if A_main.counter_that_moves_lvl_bg <= -5800:
+            A_main.game_won = True
+            A_main.this_has_to_stop = True
+            A_main.game_started = False
+            A_main.game_over = True
+        if A_main.game_over:
+            if A_main.game_won:
+                won = True
+                gameoverpic = A_main.load_image('LevelPassedPic.png')
+                surfacee.blit(gameoverpic, (0, 0))
+                A_main.game_started = False
+                game_ended = True
+            else:
+                gameoverpic = A_main.load_image('GameOverPic.png')
+                surfacee.blit(gameoverpic, (0, 0))
+                A_main.game_started = False
+        if A_main.this_has_to_stop:
+            A_main.counter_that_moves_lvl_bg = 0
+    return [mbgc, window, game_ended, won]
