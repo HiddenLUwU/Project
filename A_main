@@ -1,1 +1,213 @@
-#main
+import pygame
+import A_Sprites
+from A_what_clicked import what_clicked
+from A_Drawing import draw
+import sqlite3
+pygame.init()
+screen = pygame.display.set_mode((1375, 1030))
+
+# MM - main menu
+# LVLS - level menu
+# SHOP - shop e
+# SET - settings :p
+# INST - instruction
+# LVL1 - lvl + number
+
+all_sprites = pygame.sprite.Group()
+spikes_1 = pygame.sprite.Group()
+spikes_2 = pygame.sprite.Group()
+spikes_3 = pygame.sprite.Group()
+spikes_4 = pygame.sprite.Group()
+spikes_5 = pygame.sprite.Group()
+
+
+def load_image(name):
+    pic = pygame.image.load(name)
+    pic = pic.convert_alpha()
+    return pic
+
+
+window = 'MM'
+game_over = False
+game_started = False
+game_won = False
+counter_that_moves_lvl_bg = 0
+this_has_to_stop = False
+sussy = False
+
+if __name__ == '__main__':
+    pygame.init()
+    pygame.display.set_caption('Драконьи гонки')
+    pygame_icon = pygame.image.load('icon.png')
+    pygame.display.set_icon(pygame_icon)
+    screen = pygame.display.set_mode((1375, 1030))
+
+    running = True
+    fps = 2
+    image = load_image("mm-1.png")
+    image1 = pygame.transform.scale(image, (1375, 1030))
+    screen.blit(image1, (0, 0))
+    pygame.display.flip()
+    clock = pygame.time.Clock()
+    main_bg_counter = 0
+    music_on = True
+    sounds_on = True
+    start_ticks = 0
+    useless = 0
+    useless2 = 0
+    won = False
+    toothless = A_Sprites.Dragon()
+    con = sqlite3.connect('game_bd')
+    cur = con.cursor()
+    # for x in range(1, 6):
+    result = cur.execute(f"SELECT spikes FROM Levels WHERE id = '{1}'").fetchall()
+    spikeees = result[0][0].split('; ')
+    for el in spikeees:
+        gg = el.split(', ')
+        spike = A_Sprites.Spike_1(toothless, gg[0], gg[1], reverse=gg[2])
+    con.close()
+    sppike_1 = A_Sprites.Spike_2(toothless, '210', '780', reverse='False')
+    sppike_2 = A_Sprites.Spike_2(toothless, '665', '680', reverse='False')
+    sppike_3 = A_Sprites.Spike_2(toothless, '1120', '-100', reverse='True')
+    sppike_4 = A_Sprites.Spike_2(toothless, '1580', '0', reverse='True')
+    sppike_5 = A_Sprites.Spike_2(toothless, '2020', '680', reverse='False')
+    sppike_6 = A_Sprites.Spike_2(toothless, '2020', '-200', reverse='True')
+    sppike_7 = A_Sprites.Spike_2(toothless, '2460', '780', reverse='False')
+    sppike_8 = A_Sprites.Spike_2(toothless, '2920', '780', reverse='False')
+    sppike_9 = A_Sprites.Spike_2(toothless, '2920', '-200', reverse='True')
+    sppike_10 = A_Sprites.Spike_2(toothless, '3380', '680', reverse='False')
+    sppike_211 = A_Sprites.Spike_2(toothless, '3840', '780', reverse='False')
+    sppike_212 = A_Sprites.Spike_2(toothless, '4300', '0', reverse='True')
+    sppike_213 = A_Sprites.Spike_2(toothless, '4760', '740', reverse='False')
+    sppike_214 = A_Sprites.Spike_2(toothless, '5220', '-50', reverse='True')
+    sppike_215 = A_Sprites.Spike_2(toothless, '5680', '780', reverse='False')
+
+
+    sppike_301 = A_Sprites.Spike_3(toothless, '170', '780', reverse='False')
+    sppike_302 = A_Sprites.Spike_3(toothless, '600', '-100', reverse='True')
+    sppike_303 = A_Sprites.Spike_3(toothless, '980', '780', reverse='False')
+    sppike_304 = A_Sprites.Spike_3(toothless, '1390', '-100', reverse='True')
+    sppike_305 = A_Sprites.Spike_3(toothless, '1780', '780', reverse='False')
+    sppike_306 = A_Sprites.Spike_3(toothless, '2190', '580', reverse='False')
+    sppike_3060 = A_Sprites.Spike_3(toothless, '2190', '-100', reverse='True')
+    sppike_307 = A_Sprites.Spike_3(toothless, '2600', '680', reverse='False')
+    sppike_308 = A_Sprites.Spike_3(toothless, '3000', '-100', reverse='True')
+    sppike_309 = A_Sprites.Spike_3(toothless, '3380', '850', reverse='False')
+    sppike_310 = A_Sprites.Spike_3(toothless, '3780', '800', reverse='False')
+    sppike_311 = A_Sprites.Spike_3(toothless, '4180', '-200', reverse='True')
+    sppike_312 = A_Sprites.Spike_3(toothless, '4580', '700', reverse='False')
+    sppike_313 = A_Sprites.Spike_3(toothless, '4990', '-100', reverse='True')
+    sppike_314 = A_Sprites.Spike_3(toothless, '5400', '690', reverse='False')
+    sppike_315 = A_Sprites.Spike_3(toothless, '5800', '-200', reverse='True')
+
+    sppike_401 = A_Sprites.Spike_4(toothless, '160', '680', reverse='False')
+    sppike_402 = A_Sprites.Spike_4(toothless, '380', '0', reverse='True')
+    sppike_403 = A_Sprites.Spike_4(toothless, '630', '-100', reverse='True')
+    sppike_404 = A_Sprites.Spike_4(toothless, '880', '680', reverse='False')
+    sppike_405 = A_Sprites.Spike_4(toothless, '1130', '0', reverse='True')
+    sppike_406 = A_Sprites.Spike_4(toothless, '1400', '660', reverse='False')
+    sppike_407 = A_Sprites.Spike_4(toothless, '1680', '730', reverse='False')
+    sppike_408 = A_Sprites.Spike_4(toothless, '1930', '0', reverse='True')
+    sppike_409 = A_Sprites.Spike_4(toothless, '2200', '710', reverse='False')
+    sppike_410 = A_Sprites.Spike_4(toothless, '2480', '-100', reverse='True')
+    sppike_411 = A_Sprites.Spike_4(toothless, '2730', '600', reverse='False')
+    sppike_412 = A_Sprites.Spike_4(toothless, '3000', '-100', reverse='True')
+    sppike_413 = A_Sprites.Spike_4(toothless, '3290', '700', reverse='False')
+    sppike_414 = A_Sprites.Spike_4(toothless, '3560', '-150', reverse='True')
+    sppike_415 = A_Sprites.Spike_4(toothless, '3830', '620', reverse='False')
+    sppike_416 = A_Sprites.Spike_4(toothless, '4100', '700', reverse='False')
+    sppike_417 = A_Sprites.Spike_4(toothless, '4390', '-150', reverse='True')
+    sppike_418 = A_Sprites.Spike_4(toothless, '4700', '580', reverse='False')
+    sppike_419 = A_Sprites.Spike_4(toothless, '4980', '0', reverse='True')
+    sppike_420 = A_Sprites.Spike_4(toothless, '5250', '560', reverse='False')
+    sppike_421 = A_Sprites.Spike_4(toothless, '4520', '0', reverse='True')
+
+    sppike_501 = A_Sprites.Spike_5(toothless, '130', '780', reverse='False')
+    sppike_502 = A_Sprites.Spike_5(toothless, '450', '0', reverse='True')
+    sppike_503 = A_Sprites.Spike_5(toothless, '720', '0', reverse='True')
+    sppike_504 = A_Sprites.Spike_5(toothless, '1050', '730', reverse='False')
+    sppike_505 = A_Sprites.Spike_5(toothless, '1350', '880', reverse='False')
+    sppike_506 = A_Sprites.Spike_5(toothless, '1650', '0', reverse='True')
+    sppike_507 = A_Sprites.Spike_5(toothless, '1950', '700', reverse='False')
+    sppike_508 = A_Sprites.Spike_5(toothless, '2250', '0', reverse='True')
+    sppike_509 = A_Sprites.Spike_5(toothless, '2550', '680', reverse='False')
+    sppike_510 = A_Sprites.Spike_5(toothless, '2860', '780', reverse='False')
+    sppike_511 = A_Sprites.Spike_5(toothless, '3160', '0', reverse='True')
+    sppike_512 = A_Sprites.Spike_5(toothless, '3560', '-100', reverse='True')
+    sppike_513 = A_Sprites.Spike_5(toothless, '3860', '590', reverse='False')
+    sppike_514 = A_Sprites.Spike_5(toothless, '4160', '0', reverse='True')
+    sppike_515 = A_Sprites.Spike_5(toothless, '4460', '750', reverse='False')
+    sppike_516 = A_Sprites.Spike_5(toothless, '4760', '730', reverse='False')
+    sppike_517 = A_Sprites.Spike_5(toothless, '5060', '0', reverse='True')
+    sppike_518 = A_Sprites.Spike_5(toothless, '5360', '880', reverse='False')
+    sppike_519 = A_Sprites.Spike_5(toothless, '5660', '0', reverse='True')
+
+    while running:
+        # ПРОВЕРКА НА НАЖАТИЕ КНОПОК
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                aa = what_clicked(event.pos, window, sounds_on, music_on, fps, main_bg_counter, game_over, game_started)
+                window = aa[0]
+                music_on = aa[1]
+                sounds_on = aa[2]
+                fps = aa[3]
+                main_bg_counter = aa[4]
+                game_over = aa[5]
+                game_started = aa[6]
+            if event.type == pygame.KEYDOWN and event.key == 1073741906:
+                toothless.update(event=event)
+            if event.type == pygame.KEYDOWN and event.key == 1073741903:
+                toothless.update(event=event)
+        # ПРОВЕРКА НА НАЖАТИЕ КНОПОК
+        a = draw(screen, window, sounds_on, music_on, main_bg_counter, game_over, won)
+        main_bg_counter = a[0]
+        window = a[1]
+        game_over = a[2]
+        won = a[3]
+        if game_started and useless2 < 1:
+            useless = 0
+            start_ticks = pygame.time.get_ticks()
+            game_started = False
+            useless2 += 1
+            game_over = False
+            won = False
+        if game_over and useless < 1:
+            useless2 = 0
+            seconds = (pygame.time.get_ticks() - start_ticks) // 1000
+            ms = pygame.time.get_ticks() - start_ticks
+            if len(str(seconds)) < 2:
+                seconds = '0' + str(seconds)
+            if won:
+                con = sqlite3.connect('game_bd')
+                cur = con.cursor()
+                res = cur.execute(f'SELECT time_passing FROM Levels WHERE id = {window[-1]}').fetchall()
+                res2 = res[0][0]
+                sec2 = res2[3:5]
+                sec3 = res2[6:8]
+                if res2 == '00:00:00' or (won and (int(sec2) > int(seconds) or (int(sec2) == int(seconds) and
+                                                                                int(sec3) >= int(str(ms)[-3:-1])))):
+                    update = cur.execute(f"UPDATE Levels SET time_passing = '00:{seconds}:{str(ms)[-3:-1]}'  WHERE id = "
+                                         f"'{window[-1]}'")
+                    con.commit()
+                    con.close()
+            seconds = 0
+            start_ticks = 0
+            game_over = False
+            useless += 1
+            won = False
+        # useless
+        if this_has_to_stop:
+            all_sprites.update()
+            spikes_1.update()
+            spikes_2.update()
+            spikes_3.update()
+            spikes_4.update()
+            spikes_5.update()
+            counter_that_moves_lvl_bg = 0
+            this_has_to_stop = False
+        # useless
+        pygame.display.flip()
+        clock.tick(fps)
+    pygame.quit()
