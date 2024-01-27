@@ -1,1 +1,226 @@
-#sprites
+import pygame
+from A_main import load_image, all_sprites, spikes_1, spikes_2, spikes_3, spikes_4, spikes_5
+import A_main
+
+
+class Dragon(pygame.sprite.Sprite):
+    pihture = load_image("Toothless1.png")
+    pihture = pygame.transform.scale(pihture, (200, 200))
+    lol = load_image('boom.png')
+    lol = pygame.transform.scale(lol, (300, 200))
+    t2 = load_image('Toothless4.png')
+    t2 = pygame.transform.scale(t2, (200, 200))
+
+    def __init__(self):
+        super().__init__(all_sprites)
+        self.image = Dragon.pihture
+        self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect.x = 100
+        self.rect.y = 350
+
+    def update(self, event=None):
+        if A_main.game_started:
+            if not A_main.game_over:
+                self.rect = self.rect.move(0, 30)
+                self.image = Dragon.pihture
+
+            if event is not None and event.key == 1073741906 and not A_main.game_over:
+                self.rect.y -= 100
+                self.image = Dragon.t2
+                A_main.sussy = False
+
+            if event is not None and event.key == 1073741903 and not A_main.game_over:
+                A_main.sussy = True
+
+            if self.rect.y >= 930:
+                A_main.game_over = True
+
+            if self.rect.y <= -150:
+                A_main.game_over = True
+
+            if A_main.this_has_to_stop:
+                self.rect.x = 100
+                self.rect.y = 350
+                self.image = Dragon.pihture
+                A_main.game_over = False
+
+
+class Spike_1(pygame.sprite.Sprite):
+    imag = load_image("spike-1.png")
+    imag = pygame.transform.scale(imag, (200, 200))
+    revimag = load_image("spike-1rev.png")
+    revimag = pygame.transform.scale(revimag, (200, 200))
+
+    def __init__(self, dr, x_top, y_top, reverse=False):
+        super().__init__(spikes_1)
+        if str(reverse) == 'True':
+            self.image = Spike_1.revimag
+        else:
+            self.image = Spike_1.imag
+        self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
+        self.x = int(x_top)
+        self.y = int(y_top)
+        self.rect.x = int(x_top)
+        self.rect.y = int(y_top)
+        self.dragon = dr
+
+    def update(self):
+        if not pygame.sprite.collide_mask(self, self.dragon) and not A_main.game_over:
+            self.rect = self.rect.move(-15, 0)
+        else:
+            A_main.game_over = True
+
+        if A_main.sussy:
+            A_main.counter_that_moves_lvl_bg -= 3
+            self.rect = self.rect.move(-50, 0)
+
+        if A_main.this_has_to_stop:
+            self.rect.x = self.x
+            self.rect.y = self.y
+            A_main.game_over = False
+
+
+class Spike_2(pygame.sprite.Sprite):
+    imag = load_image("spike-1.png")
+    imag = pygame.transform.scale(imag, (300, 400))
+    revimag = load_image("spike-1rev.png")
+    revimag = pygame.transform.scale(revimag, (300, 400))
+
+    def __init__(self, dr, x_top, y_top, reverse=False):
+        super().__init__(spikes_2)
+        if str(reverse) == 'True':
+            self.image = Spike_2.revimag
+        else:
+            self.image = Spike_2.imag
+        self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
+        self.x = int(x_top)
+        self.y = int(y_top)
+        self.rect.x = int(x_top)
+        self.rect.y = int(y_top)
+        self.dragon = dr
+
+    def update(self):
+        if not pygame.sprite.collide_mask(self, self.dragon) and not A_main.game_over:
+            self.rect = self.rect.move(-15, 0)
+        else:
+            A_main.game_over = True
+
+        if A_main.sussy:
+            A_main.counter_that_moves_lvl_bg -= 3
+            self.rect = self.rect.move(-50, 0)
+
+        if A_main.this_has_to_stop:
+            self.rect.x = self.x
+            self.rect.y = self.y
+            A_main.game_over = False
+
+
+class Spike_3(pygame.sprite.Sprite):
+    imag = load_image("tree-1.png")
+    imag = pygame.transform.scale(imag, (350, 500))
+    revimag = load_image("cloud-1.png")
+    revimag = pygame.transform.scale(revimag, (350, 500))
+
+    def __init__(self, dr, x_top, y_top, reverse=False):
+        super().__init__(spikes_3)
+        if str(reverse) == 'True':
+            self.image = Spike_3.revimag
+        else:
+            self.image = Spike_3.imag
+        self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
+        self.x = int(x_top)
+        self.y = int(y_top)
+        self.rect.x = int(x_top)
+        self.rect.y = int(y_top)
+        self.dragon = dr
+
+    def update(self):
+        if not pygame.sprite.collide_mask(self, self.dragon) and not A_main.game_over:
+            self.rect = self.rect.move(-15, 0)
+        else:
+            A_main.game_over = True
+
+        if A_main.sussy:
+            A_main.counter_that_moves_lvl_bg -= 3
+            self.rect = self.rect.move(-50, 0)
+
+        if A_main.this_has_to_stop:
+            self.rect.x = self.x
+            self.rect.y = self.y
+            A_main.game_over = False
+
+
+class Spike_4(pygame.sprite.Sprite):
+    imag = load_image("wave-1.png")
+    imag = pygame.transform.scale(imag, (400, 500))
+    revimag = load_image("lightning-2.png")
+    revimag = pygame.transform.scale(revimag, (400, 500))
+
+    def __init__(self, dr, x_top, y_top, reverse=False):
+        super().__init__(spikes_4)
+        if str(reverse) == 'True':
+            self.image = Spike_4.revimag
+        else:
+            self.image = Spike_4.imag
+        self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
+        self.x = int(x_top)
+        self.y = int(y_top)
+        self.rect.x = int(x_top)
+        self.rect.y = int(y_top)
+        self.dragon = dr
+
+    def update(self):
+        if not pygame.sprite.collide_mask(self, self.dragon) and not A_main.game_over:
+            self.rect = self.rect.move(-15, 0)
+        else:
+            A_main.game_over = True
+
+        if A_main.sussy:
+            A_main.counter_that_moves_lvl_bg -= 2
+            self.rect = self.rect.move(-50, 0)
+
+        if A_main.this_has_to_stop:
+            self.rect.x = self.x
+            self.rect.y = self.y
+            A_main.game_over = False
+
+
+class Spike_5(pygame.sprite.Sprite):
+    imag = load_image("crystal-1.png")
+    imag = pygame.transform.scale(imag, (400, 500))
+    revimag = load_image("crystal-1rev.png")
+    revimag = pygame.transform.scale(revimag, (400, 500))
+
+    def __init__(self, dr, x_top, y_top, reverse=False):
+        super().__init__(spikes_5)
+        if str(reverse) == 'True':
+            self.image = Spike_5.revimag
+        else:
+            self.image = Spike_5.imag
+        self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
+        self.x = int(x_top)
+        self.y = int(y_top)
+        self.rect.x = int(x_top)
+        self.rect.y = int(y_top)
+        self.dragon = dr
+
+    def update(self):
+        if not pygame.sprite.collide_mask(self, self.dragon) and not A_main.game_over:
+            self.rect = self.rect.move(-15, 0)
+        else:
+            A_main.game_over = True
+
+        if A_main.sussy:
+            A_main.counter_that_moves_lvl_bg -= 2
+            self.rect = self.rect.move(-50, 0)
+
+        if A_main.this_has_to_stop:
+            self.rect.x = self.x
+            self.rect.y = self.y
+            A_main.game_over = False
