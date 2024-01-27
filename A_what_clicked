@@ -1,1 +1,78 @@
-#what clicked
+import pygame
+import A_main
+import sqlite3
+
+
+def what_clicked(event, window, sounds, music, fps, mbgc, game_over, game_started):
+    connect = sqlite3.connect('game_bd')
+    cur = connect.cursor()
+    result = cur.execute("SELECT lvl_status FROM Levels").fetchall()
+    connect.close()
+    if 440 <= event[0] <= 970 and 365 <= event[1] <= 535 and window == 'MM':
+        window = 'LVLS'
+        fps = 10
+    elif 0 <= event[0] <= 150 and 0 <= event[1] <= 153 and (window == 'LVLS' or window == 'SET' or window == 'SHOP'):
+        window = 'MM'
+        fps = 2
+        mbgc = 0
+    elif 123 <= event[0] <= 263 and 185 <= event[1] <= 325 and window == 'LVLS' and result[0][0]:
+        window = 'LVL1'
+        fps = 10
+        game_started = True
+        A_main.game_started = True
+        A_main.all_sprites.update()
+        A_main.spikes_1.update()
+        A_main.this_has_to_stop = False
+        A_main.counter_that_moves_lvl_bg = 0
+    elif 450 <= event[0] <= 640 and 715 <= event[1] <= 905 and (window == 'LVL1' or window == 'LVL2' or
+                                                                window == 'LVL3' or window == 'LVL4' or
+                                                                window == 'LVL5') and A_main.game_over:
+        window = 'LVLS'
+        fps = 10
+        game_over = True
+        A_main.game_over = False
+        A_main.game_started = False
+        A_main.this_has_to_stop = True
+        A_main.sussy = False
+    # AGAIN
+    elif 770 <= event[0] <= 960 and 715 <= event[1] <= 905 and window == 'LVL1' and A_main.game_over:
+        window = 'LVL1'
+        A_main.this_has_to_stop = True
+        A_main.game_over = False
+        A_main.game_started = True
+        A_main.again = 'yes'
+        fps = 10
+    # AGAIN
+    elif 380 <= event[0] <= 520 and 185 <= event[1] <= 325 and window == 'LVLS' and result[1][0]:
+        window = 'LVL2'
+        fps = 10
+        A_main.game_started = True
+        A_main.all_sprites.update()
+        A_main.spikes_2.update()
+        A_main.this_has_to_stop = False
+        A_main.counter_that_moves_lvl_bg = 0
+    elif 635 <= event[0] <= 775 and 185 <= event[1] <= 325 and window == 'LVLS' and result[2][0]:
+        window = 'LVL3'
+        fps = 10
+        A_main.game_started = True
+        A_main.all_sprites.update()
+        A_main.spikes_3.update()
+        A_main.this_has_to_stop = False
+        A_main.counter_that_moves_lvl_bg = 0
+    elif 890 <= event[0] <= 1030 and 185 <= event[1] <= 325 and window == 'LVLS' and result[3][0]:
+        window = 'LVL4'
+        fps = 10
+        A_main.game_started = True
+        A_main.all_sprites.update()
+        A_main.spikes_4.update()
+        A_main.this_has_to_stop = False
+        A_main.counter_that_moves_lvl_bg = 0
+    elif 1145 <= event[0] <= 1295 and 185 <= event[1] <= 325 and window == 'LVLS' and result[4][0]:
+        window = 'LVL5'
+        fps = 10
+        A_main.game_started = True
+        A_main.all_sprites.update()
+        A_main.spikes_5.update()
+        A_main.this_has_to_stop = False
+        A_main.counter_that_moves_lvl_bg = 0
+    return [window, music, sounds, fps, mbgc, game_over, game_started]
