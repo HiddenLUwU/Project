@@ -34,15 +34,6 @@ def what_clicked(event, window, sounds, music, fps, mbgc, game_over, game_starte
         A_main.game_started = False
         A_main.this_has_to_stop = True
         A_main.sussy = False
-    # AGAIN
-    elif 770 <= event[0] <= 960 and 715 <= event[1] <= 905 and window == 'LVL1' and A_main.game_over:
-        window = 'LVL1'
-        A_main.this_has_to_stop = True
-        A_main.game_over = False
-        A_main.game_started = True
-        A_main.again = 'yes'
-        fps = 10
-    # AGAIN
     elif 380 <= event[0] <= 520 and 185 <= event[1] <= 325 and window == 'LVLS' and result[1][0]:
         window = 'LVL2'
         fps = 10
