@@ -127,6 +127,11 @@ def draw(surfacee, window, sounds_on, music_on, mbgc, game_ended, won):
         if A_main.game_over:
             if A_main.game_won:
                 won = True
+                con = sqlite3.connect('game_bd')
+                cur = con.cursor()
+                update = cur.execute(f"UPDATE Levels SET lvl_status = '1' WHERE id = '2'")
+                con.commit()
+                con.close()
                 gameoverpic = A_main.load_image('LevelPassedPic.png')
                 surfacee.blit(gameoverpic, (0, 0))
                 A_main.game_started = False
@@ -156,6 +161,11 @@ def draw(surfacee, window, sounds_on, music_on, mbgc, game_ended, won):
         if A_main.game_over:
             if A_main.game_won:
                 won = True
+                con = sqlite3.connect('game_bd')
+                cur = con.cursor()
+                update = cur.execute(f"UPDATE Levels SET lvl_status = '1' WHERE id = '3'")
+                con.commit()
+                con.close()
                 gameoverpic = A_main.load_image('LevelPassedPic.png')
                 surfacee.blit(gameoverpic, (0, 0))
                 A_main.game_started = False
@@ -185,6 +195,11 @@ def draw(surfacee, window, sounds_on, music_on, mbgc, game_ended, won):
         if A_main.game_over:
             if A_main.game_won:
                 won = True
+                con = sqlite3.connect('game_bd')
+                cur = con.cursor()
+                update = cur.execute(f"UPDATE Levels SET lvl_status = '1' WHERE id = '4'")
+                con.commit()
+                con.close()
                 gameoverpic = A_main.load_image('LevelPassedPic.png')
                 surfacee.blit(gameoverpic, (0, 0))
                 A_main.game_started = False
@@ -214,6 +229,11 @@ def draw(surfacee, window, sounds_on, music_on, mbgc, game_ended, won):
         if A_main.game_over:
             if A_main.game_won:
                 won = True
+                con = sqlite3.connect('game_bd')
+                cur = con.cursor()
+                update = cur.execute(f"UPDATE Levels SET lvl_status = '1' WHERE id = '5'")
+                con.commit()
+                con.close()
                 gameoverpic = A_main.load_image('LevelPassedPic.png')
                 surfacee.blit(gameoverpic, (0, 0))
                 A_main.game_started = False
